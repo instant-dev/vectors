@@ -6,6 +6,13 @@
 class VectorManager {
 
   constructor () {
+    this.__initialize__();
+  }
+
+  /**
+   * @private
+   */
+  __initialize__ () {
     this.maximumBatchSize = 7168 * 4; // 4 tokens per word, estimated
     this.maximumParallelRequests = 10; // 10 requests simultaneously max
     this.fastQueueTime = 10; // time to wait if no other entries are added
