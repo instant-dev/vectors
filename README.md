@@ -55,9 +55,9 @@ const Vectors = new VectorManager();
 
 ## Usage
 
-Once you've imported and instantiated the package, you can use it like so.
+Once you've imported and instantiated the package, it's easy to use.
 
-Set a batch engine:
+### Set a batch engine
 
 ```javascript
 // values will automatically be batched appropriately
@@ -70,13 +70,15 @@ Vectors.setEngine(async (values) => {
 });
 ```
 
-Create a single vector:
+### Create a single vectors
 
 ```javascript
 let vector = await Vectors.create(`Something to vectorize!`);
 ```
 
-Create multiple vectors, will automatically batch:
+### Create multiple vectors
+
+Manually manage vector creation:
 
 ```javascript
 const myStrings = [
@@ -89,7 +91,7 @@ const myStrings = [
 let vectors = await Promise.all(myStrings.map(str => Vectors.create(str)));
 ```
 
-Create multiple vectors with `batchCreate` utility:
+Or create multiple vectors easily with the `batchCreate` utility:
 
 ```javascript
 const myStrings = [
@@ -102,7 +104,21 @@ const myStrings = [
 let vectors = await Vectors.batchCreate(myStrings);
 ```
 
-# Acknowledgements
+## Configuration
+
+You can configure the following parameters:
+
+```javascript
+const Vectors = new VectorManager();
+
+// these are the defaults
+Vectors.maximumBatchSize = 7168 * 4; // maximum size of a batch - for OpenAI, 4 tokens per word, estimated
+Vectors.maximumParallelRequests = 10; // 10 web requests simultaneously max
+Vectors.fastQueueTime = 10; // time to wait if no other entries are added
+Vectors.waitQueueTime = 100; // time to wait to collect entries if 1+ entries are added
+```
+
+## Acknowledgements
 
 Special thank you to [Scott Gamble](https://x.com/threesided) who helps run all
 of the front-of-house work for instant.dev 💜!
