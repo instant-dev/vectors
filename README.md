@@ -12,9 +12,9 @@ However, this API only allows for a maximum of 8,191 tokens per request:
 about 32,764 characters.
 
 **Solution:** `@instant.dev/vectors` provides a simple `VectorManager` utility that performs
-automatic, efficient batch creation of vectors via APIs. It will automatically collect
+automatic, efficient batch creation of vectors. It will automatically collect
 vector creation requests over a 100ms (configurable) timeframe and batch them to minimize
-vector creation requests.
+web requests.
 
 It is most useful in web server contexts where multiple user requests may be
 creating vectors at the same time. If you rely on the same `VectorManager` instance
@@ -70,7 +70,7 @@ Vectors.setEngine(async (values) => {
 });
 ```
 
-### Create a single vectors
+### Create a vector
 
 ```javascript
 let vector = await Vectors.create(`Something to vectorize!`);
