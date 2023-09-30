@@ -1,6 +1,6 @@
 {
   "name": "@instant.dev/vectors",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Utility for batch creating vectors via API",
   "main": "index.js",
   "scripts": {
