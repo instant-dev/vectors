@@ -83,18 +83,29 @@ class VectorManager {
     let i = 0;
     while (batches.length) {
       const parallelBatches = batches.splice(0, this.maximumParallelRequests);
-      const parallelVectors = await Promise.all(parallelBatches.map(strValues => this.vectorizeValues(strValues)));
-      parallelVectors.forEach((vectors, j) => {
-        vectors = Array.isArray(vectors)
-          ? vectors
-          : [];
-        parallelBatches[j].forEach((str, k) => {
-          if (vectors[k]) {
-            this._results.set(queue[i++], vectors[k]);
-          } else {
-            this._results.set(queue[i++], -1);
-          }
-        });
+      const parallelVectors = await Promise.allSettled(parallelBatches.map(strValues => this.vectorizeValues(strValues)));
+      parallelVectors.forEach((result, j) => {
+        if (result.status === 'rejected') {
+          parallelBatches[j].forEach((str, k) => {
+            let reason = result.reason;
+            if (!(reason instanceof Error)) {
+              reason = new Error(reason);
+            }
+            this._results.set(queue[i++], reason);
+          });
+        } else {
+          let vectors = result.value;
+          vectors = Array.isArray(vectors)
+            ? vectors
+            : [];
+          parallelBatches[j].forEach((str, k) => {
+            if (vectors[k]) {
+              this._results.set(queue[i++], vectors[k]);
+            } else {
+              this._results.set(queue[i++], -1);
+            }
+          });
+        }
       });
     }
     return true;
@@ -165,7 +176,9 @@ class VectorManager {
       await this.__sleep__(10);
     }
     this._results.delete(item);
-    if (!Array.isArray(result)) {
+    if (result instanceof Error) {
+      throw result;
+    } else if (!Array.isArray(result)) {
       throw new Error(
         `Could not vectorize: vector engine did not return a valid vector for input "${value}"`
       );

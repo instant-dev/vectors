@@ -50,6 +50,27 @@ module.exports = (InstantORM, Databases) => {
 
     });
 
+    it('Should throw error when vector engine throws error', async () => {
+
+      const testPhrase = `I am extremely happy`;
+
+      Vectors.setEngine(async (values) => {
+        throw new Error(`Not good!`);
+      });
+      
+      let vector;
+
+      try {
+        vector = await Vectors.create(testPhrase);
+      } catch (e) {
+        error = e;
+      }
+
+      expect(error).to.exist;
+      expect(error.message).to.equal('Not good!');
+
+    });
+
     it('Should succeed at vectorizing when vector engine is set properly', async () => {
 
       const testPhrase = `I am extremely happy`;
