@@ -1,7 +1,7 @@
 {
   "name": "@instant.dev/vectors",
   "version": "0.1.0",
-  "description": "Utility for batch-creating vectors via API",
+  "description": "Utility for batch creating vectors via API",
   "main": "index.js",
   "scripts": {
     "test": "mocha ./test/runner.js"

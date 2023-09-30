@@ -8,11 +8,13 @@ at once using [OpenAI embeddings](https://platform.openai.com/docs/guides/embedd
 you quickly run into IO-related performance issues. Your web requests will be throttled
 if you make too many parallel API requests, so OpenAI allows for batched requests
 via the [OpenAI embeddings API](https://platform.openai.com/docs/api-reference/embeddings).
-However, this API only allows for a maximum of 8,191 tokens: about 32,764 characters.
+However, this API only allows for a maximum of 8,191 tokens per request:
+about 32,764 characters.
 
-`@instant.dev/vectors` provides a simple `VectorManager` utility that performs automatic, efficient batch creation of vectors via APIs. It will automatically collect vector creation
-requests over a 100ms (configurable) timeframe and batch them to minimize vector creation
-requests.
+**Solution:** `@instant.dev/vectors` provides a simple `VectorManager` utility that performs
+automatic, efficient batch creation of vectors via APIs. It will automatically collect
+vector creation requests over a 100ms (configurable) timeframe and batch them to minimize
+vector creation requests.
 
 It is most useful in web server contexts where multiple user requests may be
 creating vectors at the same time. If you rely on the same `VectorManager` instance
